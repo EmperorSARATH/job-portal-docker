@@ -1,37 +1,67 @@
-version: '3.9'
-
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    container_name: elasticsearch
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
     ulimits:
       memlock: -1
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    mem_limit: 2g
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: jobportal
+      MYSQL_USER: jobuser
+      MYSQL_PASSWORD: jobpass123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 10
 
   backend:
-    image: ghcr.io/emperorsarath/job-portal-server:latest   
+    image: ghcr.io/emperorsarath/job-portal-server:latest   # ← your working image
+    container_name: jobportal-backend
     restart: unless-stopped
     environment:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jobportal
+      - SPRING_DATASOURCE_USERNAME=jobuser
+      - SPRING_DATASOURCE_PASSWORD=jobpass123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8080:8080"
     depends_on:
       elasticsearch:
+        condition: service_healthy
+      mysql:
         condition: service_healthy
 
   frontend:
     image: ghcr.io/emperorsarath/jobportal-frontend:latest
+    container_name: jobportal-frontend
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://host.docker.internal:8080
+      - NEXT_PUBLIC_API_URL=http://host.docker.internal:8080   # Windows fix
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
-  esdata:
+  es_data:
+  mysql_data:
