@@ -27,8 +27,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: jobportal
-      MYSQL_USER: jobuser
-      MYSQL_PASSWORD: jobpass123
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
     ports:
       - "3307:3306"
     volumes:
