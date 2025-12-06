@@ -1,5 +1,5 @@
 services:
-    elasticsearch:
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
     container_name: elasticsearch
     environment:
@@ -39,7 +39,7 @@ services:
       retries: 10
 
   backend:
-    image: ghcr.io/emperorsarath/job-portal-server:latest   # ← your working image
+    image: ghcr.io/emperorsarath/job-portal-server:latest
     container_name: jobportal-backend
     restart: unless-stopped
     environment:
@@ -63,7 +63,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://host.docker.internal:8080   # Windows fix
+      - NEXT_PUBLIC_API_URL=http://host.docker.internal:8080
     depends_on:
       backend:
         condition: service_healthy
