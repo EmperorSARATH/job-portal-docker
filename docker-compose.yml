@@ -26,9 +26,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: jobportal
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: TestDb
     ports:
       - "3307:3306"
     volumes:
@@ -44,7 +42,7 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jobportal
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/TestDb?useSSL=false&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
