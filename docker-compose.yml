@@ -25,7 +25,7 @@ services:
     container_name: mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: jobportal
       MYSQL_USER: root
       MYSQL_PASSWORD: password
