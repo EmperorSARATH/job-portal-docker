@@ -48,8 +48,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - JWT_PRIVATE_KEY=file:/keys/private.pem
-      - JWT_PUBLIC_KEY=file:/keys/public.pem
+      - JWT_PRIVATE_KEY_PATH=/keys/private.pem
+      - JWT_PUBLIC_KEY_PATH=/keys/public.pem
     ports:
       - "8080:8080"
     depends_on:
