@@ -50,6 +50,7 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - JWT_PRIVATE_KEY_PATH=/keys/private.pem
       - JWT_PUBLIC_KEY_PATH=/keys/public.pem
+      - DODO_API_KEY=${DODO_API_KEY}
 
 
     ports:
